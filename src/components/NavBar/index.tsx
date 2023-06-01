@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import styles from "./navbar.module.css";
-
-// import { useRouter } from "next/router";
+import authService from "@/service/magicAuthService";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -11,7 +11,12 @@ import Image from "next/image";
 
 const NavBar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
-  const [username, setUsername] = useState("");
+  const [user, setUser] = useState("authService?.user");
+
+  useEffect(() => {
+    const user = authService?.user;
+    setUser(user);
+  }, []);
   //   const [didToken, setDidToken] = useState("");
   //   const router = useRouter();
 
@@ -48,22 +53,8 @@ const NavBar = () => {
   const handleSignout: React.MouseEventHandler<HTMLAnchorElement> = async (
     e
   ) => {
-    e.preventDefault();
-
-    // try {
-    //   const response = await fetch("/api/logout", {
-    //     method: "POST",
-    //     headers: {
-    //       Authorization: `Bearer ${didToken}`,
-    //       "Content-Type": "application/json",
-    //     },
-    //   });
-
-    //   const res = await response.json();
-    // } catch (error) {
-    //   console.error("Error logging out", error);
-    //   router.push("/login");
-    // }
+    await authService.logOut();
+    console.log(authService.isAuthenticated);
   };
 
   return (
@@ -91,7 +82,7 @@ const NavBar = () => {
         <nav className={styles.navContainer}>
           <div>
             <button className={styles.usernameBtn} onClick={handleShowDropdown}>
-              <p className={styles.username}>{username}</p>
+              <p className={styles.username}>{user?.emailId}</p>
               {/** Expand more icon */}
               <Image
                 src={"/static/expand_more.svg"}
@@ -104,7 +95,11 @@ const NavBar = () => {
             {showDropdown && (
               <div className={styles.navDropdown}>
                 <div>
-                  <Link className={styles.linkName} href="/login">
+                  <Link
+                    className={styles.linkName}
+                    href={"/login"}
+                    onClick={handleSignout}
+                  >
                     Sign out
                   </Link>
                   <div className={styles.lineWrapper}></div>
