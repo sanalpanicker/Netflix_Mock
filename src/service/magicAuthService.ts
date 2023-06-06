@@ -26,20 +26,29 @@ class AuthService {
     this.user = undefined;
     this.isAuthenticated = false;
   }
-  public async login(email: string) {
-    console.log(`yo you are called ${email}`);
-    const token = await this.#magic?.auth?.loginWithEmailOTP({
-      email,
-    });
+
+  public async isLoggedIn() {
+    return await this.#magic.user.isLoggedIn();
+  }
+
+  public async setUser() {
     const { email: emailId, publicAddress } =
       await this.#magic?.user?.getMetadata();
     console.log("user", emailId);
-    console.log(token);
     this.isAuthenticated = true;
     this.user = {
       emailId,
       publicAddress,
     };
+  }
+
+  public async login(email: string) {
+    console.log(`yo you are called ${email}`);
+    const token = await this.#magic?.auth?.loginWithEmailOTP({
+      email,
+    });
+    console.log(token);
+    await this.setUser();
     return token;
   }
 

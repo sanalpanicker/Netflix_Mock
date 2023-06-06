@@ -20,7 +20,7 @@ async function getPopularVideos() {
   let data = {};
   try {
     const data = await YouTubeService.getPopularVideos();
-    console.log(data);
+    // console.log(data);
     return data;
   } catch (e) {}
   // The return value is *not* serialized

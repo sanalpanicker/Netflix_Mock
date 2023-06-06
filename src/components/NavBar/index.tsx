@@ -73,7 +73,7 @@ const NavBar = () => {
 
         <ul className={styles.navItems}>
           <li className={styles.navItem}>
-            <Link href="/">Home</Link>
+            <Link href="/home">Home</Link>
           </li>
           <li className={styles.navItem2}>
             <Link href="/browse/my-list">My List</Link>
